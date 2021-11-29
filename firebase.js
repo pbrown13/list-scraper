@@ -1,10 +1,14 @@
 const axios = require("axios");
 
-const createDataType = (dataType, obj) => {
+const createDataType = (dataType, obj, i) => {
+	insertData(dataType, obj, i)
+};
+const insertData = (dataType, ppl, i) => {
+    const final = ppl
 	let response = axios
 		.post(
 			`https://scrape-deez-default-rtdb.firebaseio.com/${dataType}.json?key=AIzaSyD_eLu1lqCUufqw3u8PRhqjkEyhajHoBDY`,
-			obj,
+			 final,
 			{
 				headers: {
 					"Content-Type": "application/json",
@@ -12,10 +16,13 @@ const createDataType = (dataType, obj) => {
 			}
 		)
 		.then((res) => {
-			console.log(res);
+			console.log(res.data)
 		})
-		.catch((e) => console.log(e));
+		.catch((e) => {
+			console.log(e)
+		});
 	return response;
 };
+
 
 module.exports = { createDataType };
