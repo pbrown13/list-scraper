@@ -1,14 +1,13 @@
 const axios = require("axios");
 
-const createDataType = (dataType, obj, i) => {
-	insertData(dataType, obj, i)
-};
-const insertData = (dataType, ppl, i) => {
-    const final = ppl
+// const createDataType = (dataType, obj, i, listName) => {
+// 	insertData(dataType, obj, i, listName);
+// };
+const createDataType = (dataType, list, i, listName) => {
 	let response = axios
-		.post(
-			`https://scrape-deez-default-rtdb.firebaseio.com/${dataType}.json?key=AIzaSyD_eLu1lqCUufqw3u8PRhqjkEyhajHoBDY`,
-			 final,
+		.put(
+			`https://scrape-deez-default-rtdb.firebaseio.com/lists/${dataType}.json?key=AIzaSyD_eLu1lqCUufqw3u8PRhqjkEyhajHoBDY`,
+			list,
 			{
 				headers: {
 					"Content-Type": "application/json",
@@ -16,13 +15,14 @@ const insertData = (dataType, ppl, i) => {
 			}
 		)
 		.then((res) => {
-			console.log(res.data)
+			//console.log(res.data)
 		})
 		.catch((e) => {
-			console.log(e)
+			console.log(dataType, e);
 		});
 	return response;
 };
+
 
 
 module.exports = { createDataType };

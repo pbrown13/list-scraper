@@ -11,6 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.24.0",
-    "cheerio": "^1.0.0-rc.10"
+    "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.10",
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
   }
 }
