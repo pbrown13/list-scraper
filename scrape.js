@@ -1,52 +1,51 @@
 const axios = require("axios");
-const cheerio = require("cheerio");
 
-const fb = require("./firebase");
-
-// a page that has a list on it
-
-const fields = ["name", "company", "title", "location"];
-	const url =
-		"https://www.nmhc.org/meetings/calendar/shc/2021-nmhc-student-housing-conference/attendees/";
-	const sectionId = "tr";
-	
-	const textId = "td";
-
+function runData() {
 	return axios
-		.get(url)
+		.get(
+			"https://iot-water-market-data-default-rtdb.firebaseio.com/conf.json",
+			{},
+			{
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}
+		)
 		.then((res) => {
-			// saves the pages raw HTML
-			const html = res.data;
-			const $ = cheerio.load(html);
-			
-			// gets the section that contains the data to scrape
-			const section = $(sectionId);
 			const list = [];
-			console.log(html);
-			// loop through each section
-			section.each(function(i, el) {
-				// get and store the row that the data is on
-				const row = $(el).children(textId);
-				console.log(row)
-				// define fields
-				const f = (string) => {
-					return $(string) 
-						.text()
-						.trim();
+			const data = res.data;
+			for (let key in data) {
+				const item = {
+					fn: data[key].firstName,
+					ln: data[key].lastName,
+					name: data[key].firstName + " " + data[key].lastname,
+					email: data[key].email,
+					company: data[key].company,
+					title: data[key].title,
+					source: "REIT LIST",
 				};
-
-				// create object and cleanup the data
-				let person = {
-					id: i,
-				};
-
-				for (let i = 0; i < fields.length; i++) {
-					if (fields[i]) person[fields[i]] = f(row[i]);
-				}
-
-				list.push(person);
-			});
-			fb.createDataType("dev", list, list.length);
-			console.log(list)
+				sendIt(item);
+				list.push(item);
+			}
+			return list;
 		})
+		.catch(e => {
+			return e
+		})
+}
+const sendIt = (item) => {
+	axios
+		.post(
+			"https://admin.kairoswater.io/version-test/api/1.1/wf/new-contact?key=cb893c3207ff5ce2811619c5aa52592b",
+			item,
+			{
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}
+		)
+		.then((res) => console.log(res))
 		.catch((e) => console.log(e));
+}
+
+runData();

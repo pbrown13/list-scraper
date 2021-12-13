@@ -2,9 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const scrape = require("./app");
-
+const cb = require("./services/clearbit")
 //var host = "0.0.0.0";
-
+ 
 const bodyParser = require("body-parser");
 const port = process.env.PORT || 3001;
 
@@ -19,7 +19,9 @@ app.get("/", (request, response) => {
 // RUN SERVER -- DEF GONNA BE WRITING THIS EVERYTIME TOO
 app.listen(port, () => {
 	console.log(`App running on port ${port}.`);
-});
+})
 
 // USE ACTIONS IMPORTED FROM APP.JS AS ENDOINTS
 app.post("/scrape", scrape.scrapeDeez);
+app.get("/rip", cb.enrichUrl)
+//app.get("/email", cb.emailLookup)
