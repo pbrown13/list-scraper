@@ -3,8 +3,6 @@ const cheerio = require("cheerio");
 
 const fb = require("./services/firebase");
 
-// a page that has a list on it
-
 const runScrape = async () => {
 	var response = null;
 	const url = "https://strataequity.com/portfolio/";
@@ -16,14 +14,14 @@ const runScrape = async () => {
 			const $ = cheerio.load(html);
 
 			const fields = [
-							"assetType",
-							"State",
-							"City",
-							"Property",
-							"Units",
-							"Arcres",
-							"sqFt",
-					  ];
+				"assetType",
+				"State",
+				"City",
+				"Property",
+				"Units",
+				"Arcres",
+				"sqFt",
+			];
 
 			const sectionId = "tr";
 
@@ -60,10 +58,18 @@ const runScrape = async () => {
 				}
 			});
 			const type = "REIT";
-			fb.createDataType(type, list);
+			//fb.createDataType(type, list);
 			response = list;
-			console.log(list);
-			return response
+			var avg = 0;
+			for (let i = 0; i < list.length; i++) {
+				if (list[i].Units) {
+					avg = avg + Number(list[i].Units);
+				}
+			}
+			const avgUnits = avg / list.length;
+			console.log(list, "Avg untits: " + avgUnits.toFixed(0));
+			// console.log(list);
+			// return response
 		})
 		.catch((e) => {
 			console.log(e);
