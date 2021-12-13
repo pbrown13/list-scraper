@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const scrape = require("./app");
+const scrape = require("./api/app");
 const cb = require("./services/clearbit")
 //var host = "0.0.0.0";
  

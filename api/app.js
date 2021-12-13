@@ -1,7 +1,7 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 
-const fb = require("./services/firebase");
+const fb = require("../services/firebase");
 
 // a page that has a list on it
 
